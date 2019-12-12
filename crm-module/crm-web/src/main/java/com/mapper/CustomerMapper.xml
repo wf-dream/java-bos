@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.CustomerMapper">
+	<!-- 查找快递员为空的客户 -->
+	<select id="findNoAassociaCustomer" resultType="customer">
+		select * from T_CUSTOMER where fixed_area_id is null
+	</select>
+	
+	<!-- 查找当前快递员所关联的客户的客户 -->
+	<select id="findHasAassociaCustomerByFixedAreaId" parameterType="int" resultType="customer">
+		select * from T_CUSTOMER where fixed_area_id=#{fixed_area_id}
+	</select>
+
+	<!-- 关联客户 -->
+	<update id="assoctiateCutomerByFxiedArea" parameterType="int">
+		update T_CUSTOMER set fixed_area_id=#{FixedAreaId} 
+			where id=#{customerId}
+	</update>
+	
+	<update id="cleanFexedArea" parameterType="int">
+		update T_CUSTOMER set fixed_area_id=null
+			where fixed_area_id=#{fxiedAreaId}
+	</update>
+	
+	<insert id="insert" parameterType="customer">
+		insert into T_CUSTOMER(username,password,type,sex,telephone,address,email,fixed_area_id) 
+			values(#{username},#{password},#{type},#{sex},#{telephone},#{address},#{email},#{fixed_area_id})
+	</insert>
+	
+	<update id="updateTypeByTelephone" parameterType="string">
+		update T_CUSTOMER set type=1 where telephone=#{telephone}
+	</update>
+		
+</mapper>
