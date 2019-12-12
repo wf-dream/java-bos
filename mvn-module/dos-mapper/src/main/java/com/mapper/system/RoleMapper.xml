@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.system.RoleMapper">
+
+	<select id="findall" parameterType="map" resultType="role">
+		select * from T_ROLE
+		<where>
+			<if test="name!=null and name!=''">
+				and name=#{name}
+			</if>
+		</where>		
+		 limit #{startNum},#{rows}
+	</select>
+
+	<select id="countRole" resultType="long">
+		select count(0) from T_ROLE
+	</select>
+	
+	<select id="edit" parameterType="int" resultType="role">
+		select * from T_ROLE where id=#{id}
+	</select>
+	
+	<insert id="insert" parameterType="role">
+		insert into T_ROLE(name,keyword,description) 
+					values(#{name},#{keyword},#{description})
+	</insert>
+	
+	<update id="update" parameterType="role">
+		update T_ROLE set 
+						name=#{name},
+						keyword=#{keyword},	
+						description=#{description}	
+					where id=#{id}	
+	</update>
+	
+	<delete id="delete" parameterType="list">
+		delete from T_ROLE where 
+			<foreach collection="array" open="id in (" close=")" item="id" separator=",">
+				#{id}
+			</foreach>
+	</delete>
+	
+	<insert id="roleBindresource" parameterType="int">
+		insert into T_ROLE_RESOURCE(roleId,resourceId) values(#{roleId},#{resourceId})
+	</insert>
+	
+	<delete id="deleteResource" parameterType="int">
+		delete from T_ROLE_RESOURCE where roleId=#{roleId}
+	</delete>
+	
+	
+
+</mapper>

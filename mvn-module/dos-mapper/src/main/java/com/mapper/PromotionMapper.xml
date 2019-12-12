@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.PromotionMapper">
+
+	<select id="findall" parameterType="map" resultType="promotion">
+		select * from T_PROMOTION
+		<where>
+			<if test="title!=null and title!=''">
+				and title=#{title}
+			</if>
+		</where>
+		limit #{startNum},#{rows}
+	</select>
+
+	<select id="countPromotion" resultType="long">
+		select count(0) from
+		T_PROMOTION
+	</select>
+
+	<insert id="promotionSave" parameterType="promotion">
+		insert into
+		T_PROMOTION(title,titleImg,activeScope,startDate,endDate,status,description)
+		values(#{title},#{titleImg},#{activeScope},#{startDate},#{endDate},#{status},#{description})
+	</insert>
+
+	<delete id="delete" parameterType="list">
+		delete from T_PROMOTION
+		where
+		<foreach collection="array" open="id in(" close=")" item="id"
+			separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="listByPage" resultType="promotion">
+		select * from T_PROMOTION where status=1
+	</select>
+	
+	<update id="promotionQuartz" parameterType="date">
+		update T_PROMOTION set status=0 where endDate &lt; #{date} and status=1
+	</update>
+
+
+</mapper>

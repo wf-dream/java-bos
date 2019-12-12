@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.FixedMapper">
+
+<select id="findall" parameterType="map" resultType="map">
+	select A.id,A.FixedAreaName,A.FixedAreaLeader,A.telephone,B.cname,B.telephone
+	 from T_FIXED_AREA A left join T_COURIER B on A.FixedAreaLeader=B.id 	 
+	<where>
+		<if test="FixedAreaName!=null and FixedAreaName!=''">
+			and FixedAreaName=#{FixedAreaName}
+		</if>
+	</where>
+	
+	limit #{startNum},#{rows}
+</select>
+
+<select id="countFixed" resultType="long">
+	select count(0) from T_FIXED_AREA
+</select>
+
+<select id="edit" resultType="fixed" parameterType="int">
+	select * from T_FIXED_AREA where id=#{id}
+</select>
+
+<insert id="insert" parameterType="fixed">
+	insert into T_FIXED_AREA(FixedAreaName,FixedAreaLeader,telephone) 
+				values(#{FixedAreaName},#{FixedAreaLeader},#{telephone})
+</insert>
+
+<update id="update" parameterType="fixed">
+	update T_FIXED_AREA set 			
+			FixedAreaName=#{FixedAreaName},
+			FixedAreaLeader=#{FixedAreaLeader},
+			telephone=#{telephone}
+		where id=#{id}			
+</update>
+
+<delete id="delete" parameterType="list">
+ 	delete from T_FIXED_AREA
+ 	where 
+ 	<foreach collection="array" open="id in(" close=")" item="id" separator="," >
+ 		#{id}
+ 	</foreach> 
+</delete>
+
+<select id="getFixedAreaName" resultType="fixed">
+	select * from T_FIXED_AREA
+</select>
+
+</mapper>

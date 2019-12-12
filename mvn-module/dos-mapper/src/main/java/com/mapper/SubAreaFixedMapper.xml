@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.SubAreaFixedMapper">
+<select id="findall" resultType="map" parameterType="map">
+		select 
+		A.id,
+		A.StartNum,
+		A.EndNum,  		
+		A.KeyWords,  
+		A.AssitKeyWords,  
+		B.province,  
+		B.city,  
+		B.distrcit, 
+		B.areacode,
+		C.FixedAreaName
+		from T_SUB_AREA A left join T_AREA B on A.AreaId=B.areacode 
+		left join T_FIXED_AREA C on A.FixedAreaId=C.id
+		<where>			
+			<if test="KeyWords!=null and KeyWords!=''">
+				and KeyWords=#{KeyWords}
+			</if>
+			<if test="AssitKeyWords!=null and AssitKeyWords!=''">
+				and AssitKeyWords '%${value}%'
+			</if>			
+		</where>
+			limit #{startNum},#{rows}
+	</select>
+	
+	<select id="countSub" resultType="Long">
+		select count(0) from T_SUB_AREA
+	</select>
+			
+	<select id="findId" parameterType="int" resultType="subareafixed">
+		select * from T_SUB_AREA where id=#{id}
+	</select>
+			
+	<insert id="insert" parameterType="subareafixed">
+		insert into T_SUB_AREA(StartNum,EndNum,KeyWords,AssitKeyWords,AreaId,FixedAreaId) 
+			values(#{StartNum},#{EndNum},#{KeyWords},#{AssitKeyWords},#{AreaId},#{FixedAreaId})
+	</insert>
+	
+	<update id="update" parameterType="subareafixed">
+		update T_SUB_AREA set 
+					StartNum=#{StartNum},
+					EndNum=#{EndNum},
+					KeyWords=#{KeyWords},
+					AssitKeyWords=#{AssitKeyWords},
+					AreaId=#{AreaId},
+					FixedAreaId=#{FixedAreaId}
+				where id=#{id}					
+	</update>
+
+</mapper>
+
+
+

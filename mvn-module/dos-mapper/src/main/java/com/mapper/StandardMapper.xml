@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.StandardMapper">
+
+	<select id="findall" resultType="Standar" parameterType="map">
+		select * from T_STANDARD 
+		<where>
+			<if test="value!=null and value!=''">
+				and name like '%${value}%'
+			</if>
+			<if test="min_weight!=null and min_weight!=''">
+				and min_weight=#{min_weight}
+			</if>
+			<if test="max_weight!=null and max_weight!=''">
+				and max_weight=#{max_weight}
+			</if>		
+		</where>
+			limit #{startNum},#{rows}
+	</select>
+	
+	<select id="countStandard" resultType="Long">
+		select count(0) from T_STANDARD
+	</select>
+	
+	<insert id="insert" parameterType="Standar">
+		insert into T_STANDARD(name,min_weight,max_weight,min_length,max_length) 
+					values(#{name},#{min_weight},#{max_weight},#{min_length},#{max_length})
+	</insert>
+	
+	<select id="findId" parameterType="int" resultType="Standar">
+		select * from T_STANDARD where id=#{id}
+	</select>
+	
+	<update id="update" parameterType="Standar">
+		update T_STANDARD set 
+						name=#{name},
+						min_weight=#{min_weight},
+						max_weight=#{max_weight},
+						min_length=#{min_length},
+						max_length=#{max_length} 
+						where id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="list">
+	 	delete from T_STANDARD
+	 	where 
+	 	<foreach collection="array" open="id in(" close=")" item="id" separator="," >
+	 		#{id}
+	 	</foreach> 
+	</delete>
+	
+	<select id="getStandardAll" resultType="Standar">
+		select * from T_STANDARD
+	</select>
+	
+</mapper>

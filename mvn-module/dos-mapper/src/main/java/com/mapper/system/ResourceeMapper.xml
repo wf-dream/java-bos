@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.system.ResourceeMapper">
+
+	<select id="findall" parameterType="map" resultType="resourcee">
+		select * from T_RESOURCE limit #{startNum},#{rows}
+	</select>
+	
+	<select id="countResourcee" resultType="long">
+		select count(0) from T_RESOURCE
+	</select>
+	
+	<select id="loginMenu" parameterType="int" resultType="map">
+		SELECT A.id as id,A.name as name,A.grantKey as grantKey,A.page as pageUrl,A.seq as seq,
+			   A.resourceType as resourceType,A.icon as icon,A.pId as pId,A.open as open 		
+		 FROM t_resource A 
+				 LEFT JOIN t_role_resource B ON A.id=B.resourceId 
+				 LEFT JOIN t_role C ON C.id=B.roleId 
+				 LEFT JOIN t_user_role D ON D.roleId=C.id 
+				 LEFT JOIN t_user E ON E.id=D.userId 
+			WHERE E.id=#{id} AND A.resourceType=0
+	</select>
+	
+	<select id="getMenuByUserId" parameterType="int" resultType="map">
+		SELECT A.id as id,A.name as name,A.grantKey as grantKey,A.page as pageUrl,A.seq as seq,
+			   A.resourceType as resourceType,A.icon as icon,A.pId as pId,A.open as open 		
+		 FROM t_resource A 
+				 LEFT JOIN t_role_resource B ON A.id=B.resourceId 
+				 LEFT JOIN t_role C ON C.id=B.roleId 
+				 LEFT JOIN t_user_role D ON D.roleId=C.id 
+				 LEFT JOIN t_user E ON E.id=D.userId 
+			WHERE E.id=#{id}
+	</select>
+
+
+</mapper>

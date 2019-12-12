@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"	
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 	
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	
+	<bean id="shiroFileter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 设置安全管理器 -->
+		<property name="securityManager" ref="securityManager"/>
+		<!-- 登录页面地址,只要认证失败都会统一调整到logonUrl -->
+		<property name="loginUrl" value="/login.jsp"></property>
+		<!-- 成功访问页面，认证成功后跳转的页面 successUrl -->
+		<property name="successUrl" value="/index.jsp"></property>
+		<!-- 未授权提示页面，授权失败跳转页面 -->
+		<property name="unauthorizedUrl" value="/noAuth.jsp"></property>
+		<property name="filterChainDefinitions" >
+			<value>
+				<!-- 放行资源 -->
+				/js/**=anon
+				/css/**=anon
+				/images/**=anon
+				/protal/**=anon
+				/ztree/**=anon
+				/upload/**=anon
+				/validatecode.jsp=anon 
+				/user/userlogin=anon 
+				<!-- 对所有的访问都进行拦截(授权),只有在这里的才进行授权管理，否则都可以访问 -->
+				/standard/list=perms[standard:*]
+				/area/list=perms[area:*]
+				/courier/list=perms[courier:*]
+				/fixed/list=perms[fixedArea:*]
+				/promotion/list=perms[promotion:*]
+				/resource/list=perms[resource:*]
+				/role/list=perms[role:*]
+				/subareafixed/list=perms[subArea:*]
+				<!-- 对所有的访问都进行拦截(认证) -->
+				/**=authc
+			</value>
+		</property>
+			
+	</bean>
+	<!-- 创建安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+			<property name="realm" ref="bosRealm"/>
+	</bean>
+	
+	<bean id="bosRealm" class="com.realm.BosRealm"></bean>
+	
+</beans>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.CourierMapper">
+
+<select id="findall" resultType="map" parameterType="map">
+	select 
+	A.id,
+	A.courierNum,
+	A.cname,
+	A.telephone,
+	A.PDA,
+	A.checkPwd,
+	A.company,
+	A.standardId,
+	B.name
+	from T_COURIER A left join T_STANDARD B on A.standardId=B.id
+	<where>
+		<if test="value!=null and value!=''">
+			and A.cname like '%${value}%'
+		</if>
+		<if test="courierNum!=null and courierNum!=''">
+			and courierNum=#{courierNum}
+		</if>
+	</where>
+		limit #{startNum},#{rows}
+</select>
+
+<select id="countCourier" resultType="long">
+	select count(0) from T_COURIER
+</select>
+
+<insert id="insert" parameterType="courier">
+	insert into T_COURIER(courierNum,cname,telephone,PDA,checkPwd,company,standardId)
+	values(#{courierNum},#{cname},#{telephone},#{PDA},#{checkPwd},#{company},#{standardId})
+</insert>
+	
+<select id="edit" resultType="courier" parameterType="int">
+	select * from T_COURIER where id=#{id}
+</select>
+	
+<update id="update" parameterType="courier">
+	update T_COURIER set 
+			courierNum=#{courierNum},
+			cname=#{cname},
+			telephone=#{telephone},
+			PDA=#{PDA},
+			checkPwd=#{checkPwd},
+			company=#{company},
+			standardId=#{standardId}
+		where id=#{id}	
+</update>
+
+<delete id="delete" parameterType="list">
+ 	delete from T_COURIER
+ 	where 
+ 	<foreach collection="array" open="id in(" close=")" item="id" separator="," >
+ 		#{id}
+ 	</foreach> 
+</delete>
+
+<select id="getCourierAll" resultType="courier">
+		select * from T_COURIER
+	</select>
+	
+</mapper>

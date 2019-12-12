@@ -1,0 +1,12 @@
+{
+	"total": 100,
+	"rows" : [
+		{"id":1,"name":"电器","price":1000},
+		{"id":11,"name":"冰箱","price":1000,"_parentId":1},
+		{"id":12,"name":"电视","price":2000,"_parentId":1},
+		{"id":13,"name":"笔记本","price":4000,"_parentId":1},
+		{"id":2,"name":"食品","price":4000},
+		{"id":21,"name":"好丽友","price":1000,"_parentId":2},
+		{"id":22,"name":"达利园","price":2000,"_parentId":2},
+		{"id":23,"name":"康师傅","price":4000,"_parentId":2}	]
+}

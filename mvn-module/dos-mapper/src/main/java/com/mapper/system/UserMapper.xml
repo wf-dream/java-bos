@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.system.UserMapper">
+
+	<select id="findall" parameterType="map" resultType="user">
+		select * from T_USER
+		<where>
+			<if test="username!=null and username!=''">
+				and username=#{username}
+			</if>
+		</where>		
+		 limit #{startNum},#{rows}
+	</select>
+
+	<select id="countUser" resultType="long">
+		select count(0) from T_USER
+	</select>
+	
+	<select id="edit" resultType="user">
+		select * from T_USER where id=#{id}
+	</select>
+	
+	<insert id="insert" parameterType="user">
+		insert into T_USER(username,password,nickname,gender,telephone,station,remark) 
+		values(#{username},#{password},#{nickname},#{gender},#{telephone},#{station},#{remark})
+	</insert>
+	
+	<update id="update" parameterType="user">
+		update T_USER set 
+					username=#{username},
+					password=#{password},
+					nickname=#{nickname},
+					gender=#{gender},
+					telephone=#{telephone},
+					station=#{station},
+					remark=#{remark}
+				where id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="list">
+		delete from T_USER where 
+			<foreach collection="array" open="id in(" close=")" item="id" separator=",">
+				#{id}
+			</foreach>
+	</delete>
+	
+	<insert id="userBindrole" parameterType="int">
+		insert into T_USER_ROLE(userId,roleId) values(#{userId},#{roleId})
+	</insert>
+	
+	<delete id="deleteRole" parameterType="int">
+		delete from T_USER_ROLE where userId=#{userId}
+	</delete>
+	
+	<select id="userlogin" parameterType="string" resultType="user">
+		select * from T_USER where username=#{username} and password=#{password}
+	</select>
+	
+	<select id="getUserByName" parameterType="string" resultType="user">
+		select * from T_USER where username=#{username}
+	</select>
+	
+</mapper>
